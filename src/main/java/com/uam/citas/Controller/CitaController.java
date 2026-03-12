@@ -41,6 +41,7 @@ public class CitaController {
 
             if (detallesCita.getUsuario() != null) cita.setUsuario(detallesCita.getUsuario());
             if (detallesCita.getEspecialista() != null) cita.setEspecialista(detallesCita.getEspecialista());
+            if (detallesCita.getHorario() != null) cita.setHorario(detallesCita.getHorario());
 
             CitaEntity actualizada = citaService.guardar(cita);
             return ResponseEntity.ok(actualizada);

@@ -5,15 +5,15 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "Expediente")
+@Table(name = "expediente") // 👈 igual que en la BD, en minúsculas
 public class ExpedienteEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idExpediante")
-    private Long idExpediente;
+    @Column(name = "idExpediante")   // 👈 igual que en la BD (con “a”)
+    private Long idExpediante;
 
-    @Column(name = "fechaCreacion")
+    @Column(name = "fechaCreacion", nullable = false)
     private LocalDate fechaDeCreacion;
 
     @Column(name = "historialNotas", columnDefinition = "TEXT")
@@ -25,12 +25,12 @@ public class ExpedienteEntity {
 
     public ExpedienteEntity() {}
 
-    public Long getIdExpediente() {
-        return idExpediente;
+    public Long getIdExpediante() {
+        return idExpediante;
     }
 
-    public void setIdExpediente(Long idExpediente) {
-        this.idExpediente = idExpediente;
+    public void setIdExpediante(Long idExpediante) {
+        this.idExpediante = idExpediante;
     }
 
     public LocalDate getFechaDeCreacion() {
