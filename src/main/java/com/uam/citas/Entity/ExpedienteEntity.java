@@ -5,12 +5,12 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "expediente") // 👈 igual que en la BD, en minúsculas
+@Table(name = "expediente")
 public class ExpedienteEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idExpediante")   // 👈 igual que en la BD (con “a”)
+    @Column(name = "idExpediante")
     private Long idExpediante;
 
     @Column(name = "fechaCreacion", nullable = false)
