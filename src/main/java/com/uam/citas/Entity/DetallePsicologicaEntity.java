@@ -11,21 +11,17 @@ public class DetallePsicologicaEntity {
     @Column(name = "idDetallePsicologica")
     private Long idDetallePsicologica;
 
-    @Column(name = "motivoConsulta", columnDefinition = "TEXT")
+    @Column(name = "descripcionEmocional", columnDefinition = "TEXT")  // ✅ existe en BD
+    private String descripcionEmocional;
+
+    @Column(name = "motivoConsulta", columnDefinition = "TEXT")  // ✅ existe en BD
     private String motivoConsulta;
 
-    @Column(name = "diagnostico", columnDefinition = "TEXT")
-    private String diagnostico;
-
-    @Column(name = "observaciones", columnDefinition = "TEXT")
-    private String observaciones;
-
     @OneToOne
-    @JoinColumn(name = "Cita_idCita", referencedColumnName = "idCita")
+    @JoinColumn(name = "cita_id", referencedColumnName = "idCita")  // ✅ corregido
     private CitaEntity cita;
 
-    public DetallePsicologicaEntity() {
-    }
+    public DetallePsicologicaEntity() {}
 
     public Long getIdDetallePsicologica() {
         return idDetallePsicologica;
@@ -35,28 +31,20 @@ public class DetallePsicologicaEntity {
         this.idDetallePsicologica = idDetallePsicologica;
     }
 
+    public String getDescripcionEmocional() {
+        return descripcionEmocional;
+    }
+
+    public void setDescripcionEmocional(String descripcionEmocional) {
+        this.descripcionEmocional = descripcionEmocional;
+    }
+
     public String getMotivoConsulta() {
         return motivoConsulta;
     }
 
     public void setMotivoConsulta(String motivoConsulta) {
         this.motivoConsulta = motivoConsulta;
-    }
-
-    public String getDiagnostico() {
-        return diagnostico;
-    }
-
-    public void setDiagnostico(String diagnostico) {
-        this.diagnostico = diagnostico;
-    }
-
-    public String getObservaciones() {
-        return observaciones;
-    }
-
-    public void setObservaciones(String observaciones) {
-        this.observaciones = observaciones;
     }
 
     public CitaEntity getCita() {
