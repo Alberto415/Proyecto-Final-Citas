@@ -26,7 +26,7 @@ public class UsuarioEntity {
     @Column(name = "tipoUsuario")
     private String tipoUsuario;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "Expediante_idExpediante", referencedColumnName = "idExpediante")
     @JsonIgnoreProperties("usuario")
     private ExpedienteEntity expediente;
