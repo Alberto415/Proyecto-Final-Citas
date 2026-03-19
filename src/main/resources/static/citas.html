@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Sistema de Citas</title>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">🏥 UAM Citas</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('usuarios')">Usuarios</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('expedientes')">Expedientes</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('especialistas')">Especialistas</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('horarios')">Horarios</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('citas')">Citas</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('detalle-medica')">Det. Médica</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('detalle-nutricion')">Det. Nutrición</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('detalle-psicologica')">Det. Psicológica</a></li>
+            </ul>
+            <div class="d-flex">
+                <input class="form-control me-2" type="number" id="searchId" placeholder="Buscar ID...">
+                <button class="btn btn-outline-light" onclick="buscarPorId()">Buscar</button>
+                <button class="btn btn-sm btn-secondary ms-1" onclick="limpiarBusqueda()">✖</button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <div id="section-usuarios" class="d-none">
+        <div class="d-flex justify-content-between mb-3">
+            <h4>Usuarios</h4>
+            <button class="btn btn-primary" onclick="openModal('usuarios')">+ Nuevo</button>
+        </div>
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark"><tr><th>ID</th><th>Matrícula</th><th>Nombre</th><th>Correo</th><th>Teléfono</th><th>Tipo</th><th>ID Expediente</th><th>Acciones</th></tr></thead>
+            <tbody id="tabla-usuarios"></tbody>
+        </table>
+    </div>
+
+    <div id="section-expedientes" class="d-none">
+        <div class="d-flex justify-content-between mb-3">
+            <h4>Expedientes</h4>
+            <button class="btn btn-primary" onclick="openModal('expedientes')">+ Nuevo</button>
+        </div>
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark"><tr><th>ID</th><th>Fecha Creación</th><th>Historial Notas</th><th>Acciones</th></tr></thead>
+            <tbody id="tabla-expedientes"></tbody>
+        </table>
+    </div>
+
+    <div id="section-especialistas" class="d-none">
+        <div class="d-flex justify-content-between mb-3">
+            <h4>Especialistas</h4>
+            <button class="btn btn-primary" onclick="openModal('especialistas')">+ Nuevo</button>
+        </div>
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark"><tr><th>ID</th><th>Nombre</th><th>Correo</th><th>Teléfono</th><th>Área</th><th>Acciones</th></tr></thead>
+            <tbody id="tabla-especialistas"></tbody>
+        </table>
+    </div>
+
+    <div id="section-horarios" class="d-none">
+        <div class="d-flex justify-content-between mb-3">
+            <h4>Horarios</h4>
+            <button class="btn btn-primary" onclick="openModal('horarios')">+ Nuevo</button>
+        </div>
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark"><tr><th>ID</th><th>Duración</th><th>Disponible</th><th>Especialista</th><th>Acciones</th></tr></thead>
+            <tbody id="tabla-horarios"></tbody>
+        </table>
+    </div>
+
+    <div id="section-citas" class="d-none">
+        <div class="d-flex justify-content-between mb-3">
+            <h4>Citas</h4>
+            <button class="btn btn-primary" onclick="openModal('citas')">+ Nuevo</button>
+        </div>
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark"><tr><th>ID</th><th>Fecha</th><th>Hora</th><th>Estado</th><th>ID Usuario</th><th>ID Especialista</th><th>ID Horario</th><th>Acciones</th></tr></thead>
+            <tbody id="tabla-citas"></tbody>
+        </table>
+    </div>
+
+    <div id="section-detalle-medica" class="d-none">
+        <div class="d-flex justify-content-between mb-3">
+            <h4>Detalle Médica</h4>
+            <button class="btn btn-primary" onclick="openModal('detalle-medica')">+ Nuevo</button>
+        </div>
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark"><tr><th>ID</th><th>Motivo Consulta</th><th>Alergias</th><th>ID Cita</th><th>Acciones</th></tr></thead>
+            <tbody id="tabla-detalle-medica"></tbody>
+        </table>
+    </div>
+
+    <div id="section-detalle-nutricion" class="d-none">
+        <div class="d-flex justify-content-between mb-3">
+            <h4>Detalle Nutrición</h4>
+            <button class="btn btn-primary" onclick="openModal('detalle-nutricion')">+ Nuevo</button>
+        </div>
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark"><tr><th>ID</th><th>Peso Actual</th><th>Estatura</th><th>Objetivo</th><th>ID Cita</th><th>Acciones</th></tr></thead>
+            <tbody id="tabla-detalle-nutricion"></tbody>
+        </table>
+    </div>
+
+    <div id="section-detalle-psicologica" class="d-none">
+        <div class="d-flex justify-content-between mb-3">
+            <h4>Detalle Psicológica</h4>
+            <button class="btn btn-primary" onclick="openModal('detalle-psicologica')">+ Nuevo</button>
+        </div>
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark"><tr><th>ID</th><th>Descripción Emocional</th><th>Motivo Consulta</th><th>ID Cita</th><th>Acciones</th></tr></thead>
+            <tbody id="tabla-detalle-psicologica"></tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="modalForm" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Formulario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button class="btn btn-primary" onclick="guardar()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script src="./js/citas.js"></script>
+</body>
+</html>
