@@ -8,7 +8,7 @@ public class UsuarioDTO {
     private String correo;
     private String telefono;
     private String tipoUsuario;
-    private Integer idExpediente;
+    private Long idExpediente;
 
     public Long getIdUsuario() {
         return idUsuario;
@@ -58,11 +58,11 @@ public class UsuarioDTO {
         this.tipoUsuario = tipoUsuario;
     }
 
-    public Integer getIdExpediente() {
+    public Long getIdExpediente() {
         return idExpediente;
     }
 
-    public void setIdExpediente(Integer idExpediente) {
+    public void setIdExpediente(Long idExpediente) {
         this.idExpediente = idExpediente;
     }
 }

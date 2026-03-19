@@ -4,58 +4,32 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class CitaDTO {
+    private Long idCita;
     private LocalDate fecha;
     private LocalTime hora;
     private String estado;
-    private Integer usuarioIdUsuario;
-    private Integer especialistaIdEspecialista;
-    private Integer horarioIdhorario;
+    private Long usuarioIdUsuario;
+    private Long especialistaIdEspecialista;
+    private Long horarioIdhorario;
 
-    public LocalDate getFecha() {
-        return fecha;
-    }
+    public Long getIdCita() { return idCita; }
+    public void setIdCita(Long idCita) { this.idCita = idCita; }
 
-    public void setFecha(LocalDate fecha) {
-        this.fecha = fecha;
-    }
+    public LocalDate getFecha() { return fecha; }
+    public void setFecha(LocalDate fecha) { this.fecha = fecha; }
 
-    public LocalTime getHora() {
-        return hora;
-    }
+    public LocalTime getHora() { return hora; }
+    public void setHora(LocalTime hora) { this.hora = hora; }
 
-    public void setHora(LocalTime hora) {
-        this.hora = hora;
-    }
+    public String getEstado() { return estado; }
+    public void setEstado(String estado) { this.estado = estado; }
 
-    public String getEstado() {
-        return estado;
-    }
+    public Long getUsuarioIdUsuario() { return usuarioIdUsuario; }
+    public void setUsuarioIdUsuario(Long usuarioIdUsuario) { this.usuarioIdUsuario = usuarioIdUsuario; }
 
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
+    public Long getEspecialistaIdEspecialista() { return especialistaIdEspecialista; }
+    public void setEspecialistaIdEspecialista(Long especialistaIdEspecialista) { this.especialistaIdEspecialista = especialistaIdEspecialista; }
 
-    public Integer getUsuarioIdUsuario() {
-        return usuarioIdUsuario;
-    }
-
-    public void setUsuarioIdUsuario(Integer usuarioIdUsuario) {
-        this.usuarioIdUsuario = usuarioIdUsuario;
-    }
-
-    public Integer getEspecialistaIdEspecialista() {
-        return especialistaIdEspecialista;
-    }
-
-    public void setEspecialistaIdEspecialista(Integer especialistaIdEspecialista) {
-        this.especialistaIdEspecialista = especialistaIdEspecialista;
-    }
-
-    public Integer getHorarioIdhorario() {
-        return horarioIdhorario;
-    }
-
-    public void setHorarioIdhorario(Integer horarioIdhorario) {
-        this.horarioIdhorario = horarioIdhorario;
-    }
+    public Long getHorarioIdhorario() { return horarioIdhorario; }
+    public void setHorarioIdhorario(Long horarioIdhorario) { this.horarioIdhorario = horarioIdhorario; }
 }

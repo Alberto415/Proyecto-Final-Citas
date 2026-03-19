@@ -1,7 +1,7 @@
 package com.uam.citas.Controller;
 
-import com.uam.citas.DTO.UsuarioDTO;
-import com.uam.citas.Service.UsuarioService;
+import com.uam.citas.DTO.DetallePsicologicaDTO;
+import com.uam.citas.Service.DetallePsicologicaService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,32 +9,32 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/usuarios")
-public class UsuariosController {
+@RequestMapping("/api/detalle-psicologica")
+public class DetallePsicologicaController {
 
-    private final UsuarioService service;
+    private final DetallePsicologicaService service;
 
-    public UsuariosController(UsuarioService service) {
+    public DetallePsicologicaController(DetallePsicologicaService service) {
         this.service = service;
     }
 
     @GetMapping
-    public ResponseEntity<List<UsuarioDTO>> getAll() {
+    public ResponseEntity<List<DetallePsicologicaDTO>> getAll() {
         return ResponseEntity.ok(service.getAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UsuarioDTO> getById(@PathVariable Long id) {
+    public ResponseEntity<DetallePsicologicaDTO> getById(@PathVariable Long id) {
         return ResponseEntity.ok(service.getById(id));
     }
 
     @PostMapping
-    public ResponseEntity<UsuarioDTO> create(@RequestBody UsuarioDTO dto) {
+    public ResponseEntity<DetallePsicologicaDTO> create(@RequestBody DetallePsicologicaDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(dto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UsuarioDTO> update(@PathVariable Long id, @RequestBody UsuarioDTO dto) {
+    public ResponseEntity<DetallePsicologicaDTO> update(@PathVariable Long id, @RequestBody DetallePsicologicaDTO dto) {
         return ResponseEntity.ok(service.update(id, dto));
     }
 

@@ -3,7 +3,7 @@ package com.uam.citas.Entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "DetallePsicologica")
+@Table(name = "detallepsicologica")
 public class DetallePsicologicaEntity {
 
     @Id
@@ -11,47 +11,27 @@ public class DetallePsicologicaEntity {
     @Column(name = "idDetallePsicologica")
     private Long idDetallePsicologica;
 
-    @Column(name = "descripcionEmocional", columnDefinition = "TEXT")  // ✅ existe en BD
+    @Column(name = "descripcionEmocional", columnDefinition = "TEXT")
     private String descripcionEmocional;
 
-    @Column(name = "motivoConsulta", columnDefinition = "TEXT")  // ✅ existe en BD
+    @Column(name = "motivoConsulta", columnDefinition = "TEXT")
     private String motivoConsulta;
 
-    @OneToOne
-    @JoinColumn(name = "cita_id", referencedColumnName = "idCita")  // ✅ corregido
+    @ManyToOne
+    @JoinColumn(name = "cita_id", nullable = false)
     private CitaEntity cita;
 
     public DetallePsicologicaEntity() {}
 
-    public Long getIdDetallePsicologica() {
-        return idDetallePsicologica;
-    }
+    public Long getIdDetallePsicologica() { return idDetallePsicologica; }
+    public void setIdDetallePsicologica(Long idDetallePsicologica) { this.idDetallePsicologica = idDetallePsicologica; }
 
-    public void setIdDetallePsicologica(Long idDetallePsicologica) {
-        this.idDetallePsicologica = idDetallePsicologica;
-    }
+    public String getDescripcionEmocional() { return descripcionEmocional; }
+    public void setDescripcionEmocional(String descripcionEmocional) { this.descripcionEmocional = descripcionEmocional; }
 
-    public String getDescripcionEmocional() {
-        return descripcionEmocional;
-    }
+    public String getMotivoConsulta() { return motivoConsulta; }
+    public void setMotivoConsulta(String motivoConsulta) { this.motivoConsulta = motivoConsulta; }
 
-    public void setDescripcionEmocional(String descripcionEmocional) {
-        this.descripcionEmocional = descripcionEmocional;
-    }
-
-    public String getMotivoConsulta() {
-        return motivoConsulta;
-    }
-
-    public void setMotivoConsulta(String motivoConsulta) {
-        this.motivoConsulta = motivoConsulta;
-    }
-
-    public CitaEntity getCita() {
-        return cita;
-    }
-
-    public void setCita(CitaEntity cita) {
-        this.cita = cita;
-    }
+    public CitaEntity getCita() { return cita; }
+    public void setCita(CitaEntity cita) { this.cita = cita; }
 }

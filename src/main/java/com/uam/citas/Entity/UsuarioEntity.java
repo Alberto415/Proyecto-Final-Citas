@@ -14,6 +14,8 @@ public class UsuarioEntity {
     @Column(name = "matricula")
     private String matricula;
 
+    @Column(name = "nombre")
+    private String nombre;
 
     @Column(name = "correo")
     private String correo;
@@ -45,6 +47,14 @@ public class UsuarioEntity {
 
     public void setMatricula(String matricula) {
         this.matricula = matricula;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public String getCorreo() {

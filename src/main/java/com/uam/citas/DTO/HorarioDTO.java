@@ -1,44 +1,22 @@
 package com.uam.citas.DTO;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
 
-
 public class HorarioDTO {
-    private Long idCita;
-    private LocalDate fecha;
-    private LocalTime hora;
-    private String estado;
+    private Long idhorario;
+    private LocalTime duracion;
+    private Integer disponible;
+    private String especialista;
 
-    public Long getIdCita() {
-        return idCita;
-    }
+    public Long getIdhorario() { return idhorario; }
+    public void setIdhorario(Long idhorario) { this.idhorario = idhorario; }
 
-    public void setIdCita(Long idCita) {
-        this.idCita = idCita;
-    }
+    public LocalTime getDuracion() { return duracion; }
+    public void setDuracion(LocalTime duracion) { this.duracion = duracion; }
 
-    public LocalDate getFecha() {
-        return fecha;
-    }
+    public Integer getDisponible() { return disponible; }
+    public void setDisponible(Integer disponible) { this.disponible = disponible; }
 
-    public void setFecha(LocalDate fecha) {
-        this.fecha = fecha;
-    }
-
-    public LocalTime getHora() {
-        return hora;
-    }
-
-    public void setHora(LocalTime hora) {
-        this.hora = hora;
-    }
-
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
+    public String getEspecialista() { return especialista; }
+    public void setEspecialista(String especialista) { this.especialista = especialista; }
 }

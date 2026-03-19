@@ -3,7 +3,7 @@ package com.uam.citas.Entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "DetalleNutricion")
+@Table(name = "detallenutricion")
 public class DetalleNutricionEntity {
 
     @Id
@@ -20,51 +20,24 @@ public class DetalleNutricionEntity {
     @Column(name = "objetivo", columnDefinition = "TEXT")
     private String objetivo;
 
-
-    @OneToOne
-    @JoinColumn(name = "Cita_idCita", referencedColumnName = "idCita")
+    @ManyToOne
+    @JoinColumn(name = "cita_id", nullable = false)
     private CitaEntity cita;
 
-    public DetalleNutricionEntity() {
-    }
+    public DetalleNutricionEntity() {}
 
-    public Long getIdDetalleNutricion() {
-        return idDetalleNutricion;
-    }
+    public Long getIdDetalleNutricion() { return idDetalleNutricion; }
+    public void setIdDetalleNutricion(Long idDetalleNutricion) { this.idDetalleNutricion = idDetalleNutricion; }
 
-    public void setIdDetalleNutricion(Long idDetalleNutricion) {
-        this.idDetalleNutricion = idDetalleNutricion;
-    }
+    public Float getPesoActual() { return pesoActual; }
+    public void setPesoActual(Float pesoActual) { this.pesoActual = pesoActual; }
 
-    public Float getPesoActual() {
-        return pesoActual;
-    }
+    public Float getEstatura() { return estatura; }
+    public void setEstatura(Float estatura) { this.estatura = estatura; }
 
-    public void setPesoActual(Float pesoActual) {
-        this.pesoActual = pesoActual;
-    }
+    public String getObjetivo() { return objetivo; }
+    public void setObjetivo(String objetivo) { this.objetivo = objetivo; }
 
-    public Float getEstatura() {
-        return estatura;
-    }
-
-    public void setEstatura(Float estatura) {
-        this.estatura = estatura;
-    }
-
-    public String getObjetivo() {
-        return objetivo;
-    }
-
-    public void setObjetivo(String objetivo) {
-        this.objetivo = objetivo;
-    }
-
-    public CitaEntity getCita() {
-        return cita;
-    }
-
-    public void setCita(CitaEntity cita) {
-        this.cita = cita;
-    }
+    public CitaEntity getCita() { return cita; }
+    public void setCita(CitaEntity cita) { this.cita = cita; }
 }

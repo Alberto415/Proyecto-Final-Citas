@@ -1,25 +1,25 @@
 package com.uam.citas.DTO;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class ExpedienteDTO {
-    private int idExpediente;
-    private Date fechaDeCreacion;
+    private Long idExpediente;
+    private LocalDate fechaDeCreacion;
     private String historialNotas;
 
-    public int getIdExpediente() {
+    public Long getIdExpediente() {
         return idExpediente;
     }
 
-    public void setIdExpediente(int idExpediente) {
+    public void setIdExpediente(Long idExpediente) {
         this.idExpediente = idExpediente;
     }
 
-    public Date getFechaDeCreacion() {
+    public LocalDate getFechaDeCreacion() {
         return fechaDeCreacion;
     }
 
-    public void setFechaDeCreacion(Date fechaDeCreacion) {
+    public void setFechaDeCreacion(LocalDate fechaDeCreacion) {
         this.fechaDeCreacion = fechaDeCreacion;
     }
 

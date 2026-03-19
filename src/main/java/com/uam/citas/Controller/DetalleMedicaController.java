@@ -1,7 +1,7 @@
 package com.uam.citas.Controller;
 
-import com.uam.citas.DTO.UsuarioDTO;
-import com.uam.citas.Service.UsuarioService;
+import com.uam.citas.DTO.DetalleMedicaDTO;
+import com.uam.citas.Service.DetalleMedicaService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,32 +9,32 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/usuarios")
-public class UsuariosController {
+@RequestMapping("/api/detalle-medica")
+public class DetalleMedicaController {
 
-    private final UsuarioService service;
+    private final DetalleMedicaService service;
 
-    public UsuariosController(UsuarioService service) {
+    public DetalleMedicaController(DetalleMedicaService service) {
         this.service = service;
     }
 
     @GetMapping
-    public ResponseEntity<List<UsuarioDTO>> getAll() {
+    public ResponseEntity<List<DetalleMedicaDTO>> getAll() {
         return ResponseEntity.ok(service.getAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UsuarioDTO> getById(@PathVariable Long id) {
+    public ResponseEntity<DetalleMedicaDTO> getById(@PathVariable Long id) {
         return ResponseEntity.ok(service.getById(id));
     }
 
     @PostMapping
-    public ResponseEntity<UsuarioDTO> create(@RequestBody UsuarioDTO dto) {
+    public ResponseEntity<DetalleMedicaDTO> create(@RequestBody DetalleMedicaDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(dto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UsuarioDTO> update(@PathVariable Long id, @RequestBody UsuarioDTO dto) {
+    public ResponseEntity<DetalleMedicaDTO> update(@PathVariable Long id, @RequestBody DetalleMedicaDTO dto) {
         return ResponseEntity.ok(service.update(id, dto));
     }
 

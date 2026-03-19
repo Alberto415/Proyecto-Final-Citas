@@ -1,8 +1,8 @@
 package com.uam.citas.Controller;
 
-import com.uam.citas.Entity.CitaEntity;
+import com.uam.citas.DTO.CitaDTO;
 import com.uam.citas.Service.CitaService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,45 +12,35 @@ import java.util.List;
 @RequestMapping("/api/citas")
 public class CitaController {
 
-    @Autowired
-    private CitaService citaService;
+    private final CitaService service;
+
+    public CitaController(CitaService service) {
+        this.service = service;
+    }
 
     @GetMapping
-    public List<CitaEntity> listar() {
-        return citaService.listarTodas();
+    public ResponseEntity<List<CitaDTO>> getAll() {
+        return ResponseEntity.ok(service.getAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CitaEntity> buscar(@PathVariable Long id) {
-        return citaService.buscarPorId(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<CitaDTO> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(service.getById(id));
     }
 
     @PostMapping
-    public CitaEntity crear(@RequestBody CitaEntity cita) {
-        return citaService.guardar(cita);
+    public ResponseEntity<CitaDTO> create(@RequestBody CitaDTO dto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.create(dto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CitaEntity> actualizar(@PathVariable Long id, @RequestBody CitaEntity detallesCita) {
-        return citaService.buscarPorId(id).map(cita -> {
-            cita.setFecha(detallesCita.getFecha());
-            cita.setHora(detallesCita.getHora());
-            cita.setEstado(detallesCita.getEstado());
-
-            if (detallesCita.getUsuario() != null) cita.setUsuario(detallesCita.getUsuario());
-            if (detallesCita.getEspecialista() != null) cita.setEspecialista(detallesCita.getEspecialista());
-            if (detallesCita.getHorario() != null) cita.setHorario(detallesCita.getHorario());
-
-            CitaEntity actualizada = citaService.guardar(cita);
-            return ResponseEntity.ok(actualizada);
-        }).orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<CitaDTO> update(@PathVariable Long id, @RequestBody CitaDTO dto) {
+        return ResponseEntity.ok(service.update(id, dto));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
-        citaService.eliminar(id);
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        service.delete(id);
         return ResponseEntity.noContent().build();
     }
 }
