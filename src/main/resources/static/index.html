@@ -2,71 +2,85 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Usuarios</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="./css/usuarios.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>UAM - Gestión de Citas</title>
+    <style>.nav-link { cursor: pointer; } .table-white { background-color: white; }</style>
 </head>
-<body>
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
+<body class="bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 shadow-sm">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">CITAS APP</a>
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav">
-                <li class="nav-item"><a class="nav-link active" href="./index.html">Inicio</a></li>
-                <li class="nav-item"><a class="nav-link" href="./usuarios.html">Usuarios</a></li>
-                <li class="nav-item"><a class="nav-link" href="./citas.html">Citas</a></li>
+        <span class="navbar-brand">UAM Cuajimalpa</span>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item"><a class="nav-link" onclick="showSection('usuarios')">Usuarios</a></li>
+                <li class="nav-item"><a class="nav-link" onclick="showSection('expedientes')">Expedientes</a></li>
+                <li class="nav-item"><a class="nav-link" onclick="showSection('especialistas')">Especialistas</a></li>
+                <li class="nav-item"><a class="nav-link" onclick="showSection('horarios')">Horarios</a></li>
+                <li class="nav-item"><a class="nav-link" onclick="showSection('citas')">Citas</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Detalles</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" onclick="showSection('detalle-medica')">Médica</a></li>
+                        <li><a class="dropdown-item" onclick="showSection('detalle-nutricion')">Nutrición</a></li>
+                        <li><a class="dropdown-item" onclick="showSection('detalle-psicologica')">Psicología</a></li>
+                    </ul>
+                </li>
             </ul>
+            <div class="d-flex">
+                <input class="form-control me-2" type="number" id="searchId" placeholder="ID...">
+                <button class="btn btn-outline-light" onclick="buscarPorId()">Buscar</button>
+            </div>
         </div>
     </div>
 </nav>
-
-<div class="container mt-4">
-    <h1 class="text-center">Gestión de Usuarios</h1>
-
-    <!-- Buscar usuario -->
-    <form onsubmit="buscarUsuario(); return false;" class="mb-4">
-        <label>ID del usuario</label>
-        <input id="usuarioInput" type="text" class="form-control" required>
-        <button class="btn btn-primary mt-2" type="submit">Buscar</button>
-    </form>
-
-    <!-- Crear usuario -->
-    <form onsubmit="crearUsuario(); return false;" class="mb-4">
-        <h2>Crear nuevo usuario</h2>
-        <input id="nombre" type="text" class="form-control mb-2" placeholder="Nombre" required>
-        <input id="matricula" type="text" class="form-control mb-2" placeholder="Matrícula" required>
-        <input id="correo" type="email" class="form-control mb-2" placeholder="Correo" required>
-        <input id="telefono" type="text" class="form-control mb-2" placeholder="Teléfono">
-        <input id="tipoUsuario" type="text" class="form-control mb-2" placeholder="Tipo de usuario">
-        <input id="idExpediente" type="text" class="form-control mb-2" placeholder="ID Expediente">
-        <button class="btn btn-success" type="submit">Crear</button>
-    </form>
-
-    <!-- Actualizar usuario -->
-    <form onsubmit="actualizarUsuario(); return false;" class="mb-4">
-        <h2>Actualizar usuario</h2>
-        <input id="updateId" type="text" class="form-control mb-2" placeholder="ID" required>
-        <input id="updateNombre" type="text" class="form-control mb-2" placeholder="Nuevo nombre">
-        <input id="updateMatricula" type="text" class="form-control mb-2" placeholder="Nueva matrícula">
-        <input id="updateCorreo" type="email" class="form-control mb-2" placeholder="Nuevo correo">
-        <input id="updateTelefono" type="text" class="form-control mb-2" placeholder="Nuevo teléfono">
-        <input id="updateTipoUsuario" type="text" class="form-control mb-2" placeholder="Nuevo tipo de usuario">
-        <input id="updateExpediente" type="text" class="form-control mb-2" placeholder="Nuevo ID Expediente">
-        <button class="btn btn-warning" type="submit">Actualizar</button>
-    </form>
-
-    <!-- Eliminar usuario -->
-    <form onsubmit="eliminarUsuario(); return false;" class="mb-4">
-        <h2>Eliminar usuario</h2>
-        <input id="deleteId" type="text" class="form-control mb-2" placeholder="ID" required>
-        <button class="btn btn-danger" type="submit">Eliminar</button>
-    </form>
-
-    <!-- Resultado -->
-    <div id="resultado" class="alert mt-4" style="display:none;"></div>
+<div class="container pb-5">
+    <div id="section-usuarios" class="d-none">
+        <div class="d-flex justify-content-between mb-3"><h4>Usuarios</h4><button class="btn btn-primary" onclick="openModal('usuarios')">+ Nuevo</button></div>
+        <table class="table table-white table-striped table-bordered">
+            <thead class="table-dark"><tr><th>ID</th><th>Matrícula</th><th>Nombre</th><th>Correo</th><th>Teléfono</th><th>Tipo</th><th>Exp.</th><th>Acciones</th></tr></thead>
+            <tbody id="tabla-usuarios"></tbody>
+        </table>
+    </div>
+    <div id="section-expedientes" class="d-none">
+        <div class="d-flex justify-content-between mb-3"><h4>Expedientes</h4><button class="btn btn-primary" onclick="openModal('expedientes')">+ Nuevo</button></div>
+        <table class="table table-white table-striped table-bordered"><thead class="table-dark"><tr><th>ID</th><th>Fecha</th><th>Notas</th><th>Acciones</th></tr></thead><tbody id="tabla-expedientes"></tbody></table>
+    </div>
+    <div id="section-especialistas" class="d-none">
+        <div class="d-flex justify-content-between mb-3"><h4>Especialistas</h4><button class="btn btn-primary" onclick="openModal('especialistas')">+ Nuevo</button></div>
+        <table class="table table-white table-striped table-bordered"><thead class="table-dark"><tr><th>ID</th><th>Nombre</th><th>Correo</th><th>Teléfono</th><th>Área</th><th>Acciones</th></tr></thead><tbody id="tabla-especialistas"></tbody></table>
+    </div>
+    <div id="section-horarios" class="d-none">
+        <div class="d-flex justify-content-between mb-3"><h4>Horarios</h4><button class="btn btn-primary" onclick="openModal('horarios')">+ Nuevo</button></div>
+        <table class="table table-white table-striped table-bordered"><thead class="table-dark"><tr><th>ID</th><th>Duración</th><th>Disp.</th><th>Especialista</th><th>Acciones</th></tr></thead><tbody id="tabla-horarios"></tbody></table>
+    </div>
+    <div id="section-citas" class="d-none">
+        <div class="d-flex justify-content-between mb-3"><h4>Citas</h4><button class="btn btn-primary" onclick="openModal('citas')">+ Nueva</button></div>
+        <table class="table table-white table-striped table-bordered"><thead class="table-dark"><tr><th>ID</th><th>Fecha</th><th>Hora</th><th>Estado</th><th>Usuario</th><th>Esp.</th><th>Hor.</th><th>Acciones</th></tr></thead><tbody id="tabla-citas"></tbody></table>
+    </div>
+    <div id="section-detalle-medica" class="d-none">
+        <div class="d-flex justify-content-between mb-3"><h4>Detalle Médica</h4><button class="btn btn-primary" onclick="openModal('detalle-medica')">+ Nuevo</button></div>
+        <table class="table table-white table-striped table-bordered"><thead class="table-dark"><tr><th>ID</th><th>Motivo</th><th>Alergias</th><th>Cita</th><th>Acciones</th></tr></thead><tbody id="tabla-detalle-medica"></tbody></table>
+    </div>
+    <div id="section-detalle-nutricion" class="d-none">
+        <div class="d-flex justify-content-between mb-3"><h4>Detalle Nutrición</h4><button class="btn btn-primary" onclick="openModal('detalle-nutricion')">+ Nuevo</button></div>
+        <table class="table table-white table-striped table-bordered"><thead class="table-dark"><tr><th>ID</th><th>Peso</th><th>Estatura</th><th>Objetivo</th><th>Cita</th><th>Acciones</th></tr></thead><tbody id="tabla-detalle-nutricion"></tbody></table>
+    </div>
+    <div id="section-detalle-psicologica" class="d-none">
+        <div class="d-flex justify-content-between mb-3"><h4>Detalle Psicología</h4><button class="btn btn-primary" onclick="openModal('detalle-psicologica')">+ Nuevo</button></div>
+        <table class="table table-white table-striped table-bordered"><thead class="table-dark"><tr><th>ID</th><th>Descripción</th><th>Motivo</th><th>Cita</th><th>Acciones</th></tr></thead><tbody id="tabla-detalle-psicologica"></tbody></table>
+    </div>
 </div>
-
-<script src="./js/usuarios.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<div class="modal fade" id="modalForm" data-bs-backdrop="static" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white"><h5 class="modal-title" id="modalTitle">Formulario</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+            <div class="modal-body" id="modalBody"></div>
+            <div class="modal-footer"><button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button><button class="btn btn-success" onclick="guardar()">Guardar</button></div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="./js/citas.js"></script>
 </body>
 </html>

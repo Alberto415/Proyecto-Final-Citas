@@ -3,6 +3,7 @@ package com.uam.citas.Service;
 import com.uam.citas.DTO.UsuarioDTO;
 import com.uam.citas.Entity.CitaEntity;
 import com.uam.citas.Entity.UsuarioEntity;
+import com.uam.citas.Entity.ExpedienteEntity;
 import com.uam.citas.Mapper.UsuarioMapper;
 import com.uam.citas.Repository.CitaRepository;
 import com.uam.citas.Repository.DetallePsicologicaRepository;
@@ -11,6 +12,7 @@ import com.uam.citas.Repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,24 +50,25 @@ public class UsuarioService {
 
     public UsuarioDTO create(UsuarioDTO dto) {
         UsuarioEntity entity = mapper.toEntity(dto);
-
-        if (dto.getIdExpediente() != null) {
+        if (dto.getIdExpediente() == null) {
+            ExpedienteEntity nuevoExp = new ExpedienteEntity();
+            nuevoExp.setFechaDeCreacion(LocalDate.now());
+            nuevoExp.setHistorialNotas("Creado automáticamente.");
+            nuevoExp = expedienteRepository.save(nuevoExp);
+            entity.setExpediente(nuevoExp);
+        } else {
             entity.setExpediente(expedienteRepository.getReferenceById(dto.getIdExpediente()));
         }
-
         return mapper.toDTO(repository.save(entity));
     }
 
     public UsuarioDTO update(Long id, UsuarioDTO dto) {
-        repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con id: " + id));
+        repository.findById(id).orElseThrow(() -> new RuntimeException("No encontrado"));
         UsuarioEntity entity = mapper.toEntity(dto);
         entity.setIdUsuario(id);
-
         if (dto.getIdExpediente() != null) {
             entity.setExpediente(expedienteRepository.getReferenceById(dto.getIdExpediente()));
         }
-
         return mapper.toDTO(repository.save(entity));
     }
 
