@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Tablero UAM Citas</title>
+    <link rel="stylesheet" href="./css/tablero.css">
+</head>
+<body>
+
+<header>
+    <div class="header-content">
+        <div>
+            <h1>Tablero UAM Citas</h1>
+            <p>Datos en tiempo real desde 3 APIs externas</p>
+        </div>
+        <!-- Botón para regresar al index -->
+        <a href="index.html" class="btn-regresar">Regresar al Inicio</a>
+    </div>
+</header>
+
+<div class="contenedor">
+    <br>
+    <div class="buscador">
+        <input type="text" id="inputPais" placeholder="Busca un país (ej: japan, france, brazil...)" value="mexico">
+        <button class="boton" onclick="cargarDatos()">Buscar</button>
+    </div>
+    <div id="resultado"></div>
+</div>
+
+<script>
+    cargarDatos();
+
+    document.getElementById('inputPais').addEventListener('keydown', e => {
+        if (e.key === 'Enter') cargarDatos();
+    });
+
+    async function cargarDatos() {
+        const pais = document.getElementById('inputPais').value.trim() || 'mexico';
+        const contenedor = document.getElementById('resultado');
+        contenedor.innerHTML = '<div class="cargando">Consultando APIs...</div>';
+
+        try {
+            const resp = await fetch(`/api/integracion/tablero?pais=${encodeURIComponent(pais)}`);
+            if (!resp.ok) throw new Error('País no encontrado o error HTTP ' + resp.status);
+            const datos = await resp.json();
+            mostrarTablero(datos);
+        } catch (error) {
+            contenedor.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+        }
+    }
+
+    function mostrarTablero(datos) {
+        const contenedor = document.getElementById('resultado');
+
+        const diasHtml = datos.pronostico.map(d => `
+            <div class="dia-card">
+                <div class="dia-fecha">${formatearFecha(d.fecha)}</div>
+                <div class="dia-temp">${d.temperatura}°C</div>
+                <div class="dia-desc">${d.descripcion}</div>
+                <div class="dia-humedad">💧 ${d.humedad}%</div>
+            </div>
+        `).join('');
+
+        const peliculasHtml = datos.peliculas.map((p, i) => `
+            <div class="pelicula-card">
+                <img src="${p.urlCartel}" alt="${p.titulo}" onerror="this.src='https://via.placeholder.com/180x270?text=Sin+imagen'">
+                <div class="pelicula-info">
+                    <div class="pelicula-titulo">#${i+1} ${p.titulo}</div>
+                    <div class="pelicula-detalle">Estreno: ${p.fechaEstreno}</div>
+                    <div class="pelicula-detalle">⭐ ${p.popularidad.toFixed(1)}</div>
+                    <span class="etiqueta">TheMovieDB</span>
+                </div>
+            </div>
+        `).join('');
+
+        contenedor.innerHTML = `
+            <div class="seccion-titulo">País — RestCountries API</div>
+            <div class="pais-card">
+                <img src="${datos.pais.urlBandera}" alt="Bandera">
+                <div>
+                    <div class="pais-nombre">${datos.pais.nombre}</div>
+                    <div class="pais-detalle">Capital: ${datos.pais.capital}</div>
+                    <div class="pais-detalle">Región: ${datos.pais.region}</div>
+                    <div class="pais-detalle">Área: ${datos.pais.area.toLocaleString()} km²</div>
+                    <span class="etiqueta">RestCountries API</span>
+                </div>
+            </div>
+
+            <div class="seccion-titulo">Pronóstico 7 días — Open-Meteo API</div>
+            <div class="pronostico">${diasHtml}</div>
+
+            <div class="seccion-titulo">10 Películas más populares — TheMovieDB API</div>
+            <div class="peliculas-grid">${peliculasHtml}</div>
+            <br>
+        `;
+    }
+
+    function formatearFecha(fechaStr) {
+        const [y, m, d] = fechaStr.split('-');
+        const dias = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+        const fecha = new Date(y, m-1, d);
+        return `${dias[fecha.getDay()]} ${d}/${m}`;
+    }
+</script>
+</body>
+</html>
