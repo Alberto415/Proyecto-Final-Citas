@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 
 public interface DetalleNutricionRepository extends JpaRepository<DetalleNutricionEntity, Long> {
-
+    void deleteByCita_IdCita(Long idCita);
 }

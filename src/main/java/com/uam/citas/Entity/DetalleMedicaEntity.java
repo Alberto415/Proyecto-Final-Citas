@@ -15,7 +15,7 @@ public class DetalleMedicaEntity {
     @Column(name = "motivoConsulta")
     private String motivoConsulta;
 
-    @Column(name = "alergias")
+    @Column(name = "alegias")
     private String alergias;
 
     @ManyToOne

@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DetalleMedicaRepository extends JpaRepository<DetalleMedicaEntity, Long> {
-
+    void deleteByCita_IdCita(Long idCita);
 }

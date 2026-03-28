@@ -6,6 +6,8 @@ import com.uam.citas.Entity.UsuarioEntity;
 import com.uam.citas.Entity.ExpedienteEntity;
 import com.uam.citas.Mapper.UsuarioMapper;
 import com.uam.citas.Repository.CitaRepository;
+import com.uam.citas.Repository.DetalleMedicaRepository;
+import com.uam.citas.Repository.DetalleNutricionRepository;
 import com.uam.citas.Repository.DetallePsicologicaRepository;
 import com.uam.citas.Repository.ExpedienteRepository;
 import com.uam.citas.Repository.UsuarioRepository;
@@ -23,16 +25,22 @@ public class UsuarioService {
     private final UsuarioMapper mapper;
     private final CitaRepository citaRepository;
     private final DetallePsicologicaRepository detallePsicologicaRepository;
+    private final DetalleMedicaRepository detalleMedicaRepository;
+    private final DetalleNutricionRepository detalleNutricionRepository;
     private final ExpedienteRepository expedienteRepository;
 
     public UsuarioService(UsuarioRepository repository, UsuarioMapper mapper,
                           CitaRepository citaRepository,
                           DetallePsicologicaRepository detallePsicologicaRepository,
+                          DetalleMedicaRepository detalleMedicaRepository,
+                          DetalleNutricionRepository detalleNutricionRepository,
                           ExpedienteRepository expedienteRepository) {
         this.repository = repository;
         this.mapper = mapper;
         this.citaRepository = citaRepository;
         this.detallePsicologicaRepository = detallePsicologicaRepository;
+        this.detalleMedicaRepository = detalleMedicaRepository;
+        this.detalleNutricionRepository = detalleNutricionRepository;
         this.expedienteRepository = expedienteRepository;
     }
 
@@ -77,6 +85,8 @@ public class UsuarioService {
         List<CitaEntity> citas = citaRepository.findByUsuario_IdUsuario(id);
         for (CitaEntity cita : citas) {
             detallePsicologicaRepository.deleteByCita_IdCita(cita.getIdCita());
+            detalleMedicaRepository.deleteByCita_IdCita(cita.getIdCita());
+            detalleNutricionRepository.deleteByCita_IdCita(cita.getIdCita());
         }
         citaRepository.deleteAll(citas);
         repository.deleteById(id);
