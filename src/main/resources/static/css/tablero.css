@@ -41,7 +41,7 @@ header p { opacity: 0.7; font-size: 0.85rem; margin-top: 4px; }
 .buscador {
   display: flex;
   gap: 12px;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
 }
 
 .buscador input {
@@ -65,11 +65,92 @@ header p { opacity: 0.7; font-size: 0.85rem; margin-top: 4px; }
 }
 .boton:hover { background: #2a5298; }
 
+/* ── Botones por API ── */
+/* ── Botones por API ── */
+.api-botones {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.boton-api {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 24px 16px;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.25s;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.10);
+  position: relative;
+  overflow: hidden;
+}
+.boton-api:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
+.boton-api.activo { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.18); }
+
+.api-icono { font-size: 2.4rem; }
+.api-nombre { font-size: 1.1rem; font-weight: 700; color: white; }
+.api-fuente {
+  font-size: 0.72rem;
+  background: rgba(255,255,255,0.25);
+  color: white;
+  border-radius: 20px;
+  padding: 3px 12px;
+  margin-top: 2px;
+}
+
+.boton-pais     { background: linear-gradient(135deg, #0F6E56, #1D9E75); }
+.boton-clima    { background: linear-gradient(135deg, #0c447c, #185FA5); }
+.boton-peliculas { background: linear-gradient(135deg, #3C3489, #534AB7); }
+
+.boton-pais.activo::after,
+.boton-clima.activo::after,
+.boton-peliculas.activo::after {
+  content: '▼';
+  position: absolute;
+  bottom: 6px;
+  right: 12px;
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.7);
+}
+
+/* Colores por API */
+.boton-pais     { border-color: #1D9E75; }
+.boton-pais     .api-nombre { color: #085041; }
+.boton-pais     .api-fuente { background: #E1F5EE; color: #085041; }
+.boton-pais.activo { background: #E1F5EE; }
+
+.boton-clima    { border-color: #185FA5; }
+.boton-clima    .api-nombre { color: #042C53; }
+.boton-clima    .api-fuente { background: #E6F1FB; color: #042C53; }
+.boton-clima.activo { background: #E6F1FB; }
+
+.boton-peliculas { border-color: #534AB7; }
+.boton-peliculas .api-nombre { color: #26215C; }
+.boton-peliculas .api-fuente { background: #EEEDFE; color: #26215C; }
+.boton-peliculas.activo { background: #EEEDFE; }
+
+/* ── Mensaje de selección ── */
+.mensaje-seleccion {
+  text-align: center;
+  padding: 40px;
+  color: #555;
+  font-size: 1rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.mensaje-seleccion strong { color: #1a3a6b; }
+
+/* ── Secciones de contenido ── */
 .seccion-titulo {
   font-size: 1rem;
   font-weight: 700;
   color: #1a3a6b;
-  margin: 32px 0 16px;
+  margin: 0 0 16px;
   text-transform: uppercase;
   letter-spacing: 1px;
   border-left: 4px solid #1a3a6b;
@@ -84,7 +165,7 @@ header p { opacity: 0.7; font-size: 0.85rem; margin-top: 4px; }
   display: flex;
   align-items: center;
   gap: 24px;
-  border-top: 4px solid #1a3a6b;
+  border-top: 4px solid #1D9E75;
 }
 .pais-card img { width: 100px; border-radius: 6px; }
 .pais-nombre { font-size: 1.8rem; font-weight: 700; color: #1a3a6b; }
@@ -101,7 +182,7 @@ header p { opacity: 0.7; font-size: 0.85rem; margin-top: 4px; }
   padding: 14px 8px;
   text-align: center;
   box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-  border-top: 3px solid #1a3a6b;
+  border-top: 3px solid #185FA5;
 }
 .dia-fecha { font-size: 0.75rem; color: #888; margin-bottom: 8px; }
 .dia-temp { font-size: 1.4rem; font-weight: 700; color: #1a3a6b; }
@@ -127,10 +208,10 @@ header p { opacity: 0.7; font-size: 0.85rem; margin-top: 4px; }
   object-fit: cover;
   display: block;
 }
-
 .pelicula-info { padding: 12px; }
 .pelicula-titulo { font-size: 0.88rem; font-weight: 700; color: #1a3a6b; }
 .pelicula-detalle { font-size: 0.75rem; color: #888; margin-top: 4px; }
+
 .etiqueta {
   display: inline-block;
   background: #e8f0fe;

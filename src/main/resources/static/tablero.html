@@ -13,7 +13,6 @@
             <h1>Tablero UAM Citas</h1>
             <p>Datos en tiempo real desde 3 APIs externas</p>
         </div>
-        <!-- Botón para regresar al index -->
         <a href="index.html" class="btn-regresar">Regresar al Inicio</a>
     </div>
 </header>
@@ -22,77 +21,129 @@
     <br>
     <div class="buscador">
         <input type="text" id="inputPais" placeholder="Busca un país (ej: japan, france, brazil...)" value="mexico">
-        <button class="boton" onclick="cargarDatos()">Buscar</button>
+        <button class="boton" onclick="buscarTodo()">Buscar todo</button>
     </div>
+
+    <!-- Botones por API -->
+    <div class="api-botones">
+        <button class="boton-api boton-pais"     onclick="mostrarSeccion('pais')">
+
+            <span class="api-nombre">País</span>
+            <span class="api-fuente">RestCountries API</span>
+        </button>
+        <button class="boton-api boton-clima"    onclick="mostrarSeccion('clima')">
+
+            <span class="api-nombre">Clima</span>
+            <span class="api-fuente">Open-Meteo API</span>
+        </button>
+        <button class="boton-api boton-peliculas" onclick="mostrarSeccion('peliculas')">
+
+            <span class="api-nombre">Películas</span>
+            <span class="api-fuente">TheMovieDB API</span>
+        </button>
+    </div>
+
     <div id="resultado"></div>
 </div>
 
 <script>
-    cargarDatos();
+    let datosCargados = null;
+    let seccionActiva = null;
+
+    // Carga automática al entrar
+    buscarTodo();
 
     document.getElementById('inputPais').addEventListener('keydown', e => {
-        if (e.key === 'Enter') cargarDatos();
+        if (e.key === 'Enter') buscarTodo();
     });
 
-    async function cargarDatos() {
+    async function buscarTodo() {
         const pais = document.getElementById('inputPais').value.trim() || 'mexico';
         const contenedor = document.getElementById('resultado');
         contenedor.innerHTML = '<div class="cargando">Consultando APIs...</div>';
+        datosCargados = null;
+        seccionActiva = null;
+        quitarActivo();
 
         try {
             const resp = await fetch(`/api/integracion/tablero?pais=${encodeURIComponent(pais)}`);
             if (!resp.ok) throw new Error('País no encontrado o error HTTP ' + resp.status);
-            const datos = await resp.json();
-            mostrarTablero(datos);
+            datosCargados = await resp.json();
+            contenedor.innerHTML = `
+                <div class="mensaje-seleccion">
+                    ✅ Datos cargados para <strong>${datosCargados.pais.nombre}</strong>.
+                    Selecciona una API para ver su información.
+                </div>`;
         } catch (error) {
             contenedor.innerHTML = `<div class="error">Error: ${error.message}</div>`;
         }
     }
 
-    function mostrarTablero(datos) {
+    function mostrarSeccion(seccion) {
+        if (!datosCargados) {
+            document.getElementById('resultado').innerHTML =
+                '<div class="error">Primero busca un país.</div>';
+            return;
+        }
+
+        seccionActiva = seccion;
+        marcarActivo(seccion);
+
         const contenedor = document.getElementById('resultado');
 
-        const diasHtml = datos.pronostico.map(d => `
-            <div class="dia-card">
-                <div class="dia-fecha">${formatearFecha(d.fecha)}</div>
-                <div class="dia-temp">${d.temperatura}°C</div>
-                <div class="dia-desc">${d.descripcion}</div>
-                <div class="dia-humedad">💧 ${d.humedad}%</div>
-            </div>
-        `).join('');
+        if (seccion === 'pais') {
+            const p = datosCargados.pais;
+            contenedor.innerHTML = `
+                <div class="seccion-titulo">País — RestCountries API</div>
+                <div class="pais-card">
+                    <img src="${p.urlBandera}" alt="Bandera de ${p.nombre}">
+                    <div>
+                        <div class="pais-nombre">${p.nombre}</div>
+                        <div class="pais-detalle">Capital: ${p.capital}</div>
+                        <div class="pais-detalle">Región: ${p.region}</div>
+                        <div class="pais-detalle">Área: ${p.area.toLocaleString()} km²</div>
+                        <span class="etiqueta">RestCountries API</span>
+                    </div>
+                </div>`;
 
-        const peliculasHtml = datos.peliculas.map((p, i) => `
-            <div class="pelicula-card">
-                <img src="${p.urlCartel}" alt="${p.titulo}" onerror="this.src='https://via.placeholder.com/180x270?text=Sin+imagen'">
-                <div class="pelicula-info">
-                    <div class="pelicula-titulo">#${i+1} ${p.titulo}</div>
-                    <div class="pelicula-detalle">Estreno: ${p.fechaEstreno}</div>
-                    <div class="pelicula-detalle">⭐ ${p.popularidad.toFixed(1)}</div>
-                    <span class="etiqueta">TheMovieDB</span>
-                </div>
-            </div>
-        `).join('');
+        } else if (seccion === 'clima') {
+            const diasHtml = datosCargados.pronostico.map(d => `
+                <div class="dia-card">
+                    <div class="dia-fecha">${formatearFecha(d.fecha)}</div>
+                    <div class="dia-temp">${d.temperatura}°C</div>
+                    <div class="dia-desc">${d.descripcion}</div>
+                    <div class="dia-humedad">💧 ${d.humedad}%</div>
+                </div>`).join('');
+            contenedor.innerHTML = `
+                <div class="seccion-titulo">Pronóstico 7 días — Open-Meteo API</div>
+                <div class="pronostico">${diasHtml}</div>`;
 
-        contenedor.innerHTML = `
-            <div class="seccion-titulo">País — RestCountries API</div>
-            <div class="pais-card">
-                <img src="${datos.pais.urlBandera}" alt="Bandera">
-                <div>
-                    <div class="pais-nombre">${datos.pais.nombre}</div>
-                    <div class="pais-detalle">Capital: ${datos.pais.capital}</div>
-                    <div class="pais-detalle">Región: ${datos.pais.region}</div>
-                    <div class="pais-detalle">Área: ${datos.pais.area.toLocaleString()} km²</div>
-                    <span class="etiqueta">RestCountries API</span>
-                </div>
-            </div>
+        } else if (seccion === 'peliculas') {
+            const peliculasHtml = datosCargados.peliculas.map((p, i) => `
+                <div class="pelicula-card">
+                    <img src="${p.urlCartel}" alt="${p.titulo}"
+                         onerror="this.src='https://via.placeholder.com/180x270?text=Sin+imagen'">
+                    <div class="pelicula-info">
+                        <div class="pelicula-titulo">#${i+1} ${p.titulo}</div>
+                        <div class="pelicula-detalle">Estreno: ${p.fechaEstreno}</div>
+                        <div class="pelicula-detalle">⭐ ${p.popularidad.toFixed(1)}</div>
+                        <span class="etiqueta">TheMovieDB</span>
+                    </div>
+                </div>`).join('');
+            contenedor.innerHTML = `
+                <div class="seccion-titulo">10 Películas más populares — TheMovieDB API</div>
+                <div class="peliculas-grid">${peliculasHtml}</div><br>`;
+        }
+    }
 
-            <div class="seccion-titulo">Pronóstico 7 días — Open-Meteo API</div>
-            <div class="pronostico">${diasHtml}</div>
+    function marcarActivo(seccion) {
+        quitarActivo();
+        const mapa = { pais: 'boton-pais', clima: 'boton-clima', peliculas: 'boton-peliculas' };
+        document.querySelector(`.${mapa[seccion]}`)?.classList.add('activo');
+    }
 
-            <div class="seccion-titulo">10 Películas más populares — TheMovieDB API</div>
-            <div class="peliculas-grid">${peliculasHtml}</div>
-            <br>
-        `;
+    function quitarActivo() {
+        document.querySelectorAll('.boton-api').forEach(b => b.classList.remove('activo'));
     }
 
     function formatearFecha(fechaStr) {
