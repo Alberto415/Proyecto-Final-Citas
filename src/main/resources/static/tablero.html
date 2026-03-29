@@ -71,7 +71,7 @@
             datosCargados = await resp.json();
             contenedor.innerHTML = `
                 <div class="mensaje-seleccion">
-                    ✅ Datos cargados para <strong>${datosCargados.pais.nombre}</strong>.
+                    Datos cargados para <strong>${datosCargados.pais.nombre}</strong>.
                     Selecciona una API para ver su información.
                 </div>`;
         } catch (error) {
