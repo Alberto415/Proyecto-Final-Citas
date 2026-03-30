@@ -3,7 +3,7 @@ let seccion = '', editId = null;
 let _especialistasCache = [];
 let _usuariosCache     = [];
 let _horariosCache     = [];
-let esAdmin = false; // rol del usuario logueado
+let esAdmin = false;
 
 const idField = (id, label = 'ID') => id != null ? `
     <label class="small fw-bold text-secondary">${label}</label>
@@ -264,7 +264,6 @@ async function req(url, method = 'GET', body = null) {
     return method === 'DELETE' ? null : r.json();
 }
 
-// Verifica permisos ANTES de abrir modal o borrar
 function verificarAdmin(accion) {
     if (!esAdmin) {
         alert(`No tienes permisos para ${accion}. Solo el administrador puede modificar datos.`);
@@ -274,9 +273,7 @@ function verificarAdmin(accion) {
 }
 
 async function openModal(s, id = null) {
-    // Bloquear edición y creación si no es admin
     if (!verificarAdmin(id ? 'editar registros' : 'crear registros')) return;
-
     seccion = s;
     editId  = id;
     const d = id ? await req(`${API}/${s}/${id}`) : {};
@@ -301,6 +298,34 @@ async function openModal(s, id = null) {
     }
 
     document.getElementById("modalBody").innerHTML = html;
+    document.querySelector('#modalForm .modal-footer .btn-success').classList.remove('d-none');
+    new bootstrap.Modal(document.getElementById("modalForm")).show();
+}
+
+async function verDetalle(s, id) {
+    seccion = s;
+    const d = await req(`${API}/${s}/${id}`);
+    document.getElementById("modalTitle").textContent = "Detalle de " + s;
+
+    let html = '';
+    if (s === 'citas') {
+        const [u, e, h] = await Promise.all([
+            req(`${API}/usuarios`), req(`${API}/especialistas`), req(`${API}/horarios`)
+        ]);
+        html = forms[s](d, u, e, h);
+    } else if (s === 'expedientes') {
+        html = forms[s](d, []);
+    } else if (['detalle-medica', 'detalle-nutricion', 'detalle-psicologica'].includes(s)) {
+        const c = await req(`${API}/citas`);
+        html = forms[s](d, c);
+    } else {
+        html = forms[s](d);
+    }
+
+    document.getElementById("modalBody").innerHTML = html;
+    document.querySelectorAll('#modalBody input, #modalBody select, #modalBody textarea')
+        .forEach(el => el.setAttribute('disabled', true));
+    document.querySelector('#modalForm .modal-footer .btn-success').classList.add('d-none');
     new bootstrap.Modal(document.getElementById("modalForm")).show();
 }
 
@@ -389,9 +414,10 @@ function getId(d) {
 
 function fila(d) {
     const id   = getId(d);
-    const btns = `
-        <button class="btn btn-sm btn-warning me-1" onclick="openModal('${seccion}',${id})">Editar</button>
-        <button class="btn btn-sm btn-danger"        onclick="eliminar(${id})">Borrar</button>`;
+    const btns = esAdmin
+        ? `<button class="btn btn-sm btn-warning me-1" onclick="openModal('${seccion}',${id})">Editar</button>
+           <button class="btn btn-sm btn-danger" onclick="eliminar(${id})">Borrar</button>`
+        : `<button class="btn btn-sm btn-info" onclick="verDetalle('${seccion}',${id})">Ver</button>`;
     const nombreUsuario      = uid => _usuariosCache.find(u => u.idUsuario === uid)?.nombre          ?? `ID: ${uid}`;
     const nombreEspecialista = eid => _especialistasCache.find(e => e.idEspecialista === eid)?.nombre ?? `ID: ${eid}`;
     switch (seccion) {
@@ -430,13 +456,15 @@ async function buscarPorId() {
     }
 }
 
-// Al cargar la página: obtener el rol del usuario logueado
 window.onload = async () => {
     try {
         const sesion = await req(`${API}/sesion/yo`);
         esAdmin = sesion.esAdmin === true;
         const span = document.getElementById('usuario-activo');
         if (span) span.textContent = `${sesion.usuario} (${esAdmin ? 'Admin' : 'Alumno'})`;
+        if (!esAdmin) {
+            document.querySelectorAll('.btn-nuevo').forEach(btn => btn.classList.add('d-none'));
+        }
     } catch (e) {
         window.location.href = '/login.html';
     }
