@@ -156,7 +156,7 @@ const forms = {
             <option value="${d.especialista ?? ''}">${d.especialista ?? 'Seleccione área primero...'}</option>
         </select>
         <label class="small fw-bold">Duración</label>
-        <input class="form-control mb-2" id="f0" value="${d.duracion ?? '30 min'}">
+        <input class="form-control mb-2" id="f1_dur" type="time" value="${d.duracion ? d.duracion.substring(0,5) : '00:30'}">
         <label class="small fw-bold">Disponibilidad</label>
         <select class="form-select mb-2" id="f1">
             <option value="1" ${d.disponible === 1 ? 'selected' : ''}>Disponible</option>
@@ -336,7 +336,7 @@ const getBody = {
     usuarios:              () => ({ matricula: v('f0'), nombre: v('f1'), correo: v('f2'), telefono: v('f3'), tipoUsuario: v('f4') }),
     expedientes:           () => ({ fechaDeCreacion: v('f0'), historialNotas: v('f1') }),
     especialistas:         () => ({ nombre: v('f0'), correo: v('f1'), telefono: v('f2'), area: v('f3') }),
-    horarios:              () => ({ duracion: v('f0'), disponible: n('f1'), especialista: v('f2') }),
+    horarios:              () => ({ duracion: v('f1_dur') ? v('f1_dur') + ':00' : null, disponible: n('f1'), especialista: v('f2') }),
     citas:                 () => ({ fecha: v('f0'), hora: v('f1'), estado: v('f2'), usuarioIdUsuario: n('f3'), especialistaIdEspecialista: getEspecialistaSeleccionado(), horarioIdhorario: n('f5') }),
     'detalle-medica':      () => ({ motivoConsulta: v('f0'), alergias: v('f1'), citaIdCita: n('f2') }),
     'detalle-nutricion':   () => ({ pesoActual: parseFloat(v('f0')), estatura: parseFloat(v('f1')), objetivo: v('f2'), citaIdCita: n('f3') }),

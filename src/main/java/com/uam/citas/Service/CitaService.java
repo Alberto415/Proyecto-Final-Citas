@@ -57,7 +57,16 @@ public class CitaService {
             entity.setHorario(horarioRepository.getReferenceById(dto.getHorarioIdhorario()));
         }
 
-        return mapper.toDTO(repository.save(entity));
+        CitaDTO resultado = mapper.toDTO(repository.save(entity));
+
+        if (dto.getHorarioIdhorario() != null) {
+            horarioRepository.findById(dto.getHorarioIdhorario()).ifPresent(horario -> {
+                horario.setDisponible(0);
+                horarioRepository.save(horario);
+            });
+        }
+
+        return resultado;
     }
 
     public CitaDTO update(Long id, CitaDTO dto) {
